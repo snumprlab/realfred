@@ -25,7 +25,8 @@ mkdir <workspace dir>
 cd <workspace dir>
 mkdir alfred_src
 cd alfred_src
-git clone https://huggingface.co/ch-min-ys/alfred
+git clone https://huggingface.co/SNUMPR/hlsm_alfred
+mv hlsm_alfred alfred
 ```
 
 4. Define environment variables. **Do this before running every script in this repo.**
@@ -36,7 +37,8 @@ source init.sh
 5. (Optional) Download pre-trained models by cloning them in to `<workspace_dir>`.
 ```
 cd <workspace dir>
-git clone https://huggingface.co/ch-min-ys/models
+git clone https://huggingface.co/SNUMPR/hlsm_realfred_models
+mv hlsm_realfred_models models
 ```
 
 

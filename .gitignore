@@ -1,0 +1,7 @@
+builds
+depth_models
+*.pyc
+__pycache__/
+*.pth
+*.pt
+*.zip

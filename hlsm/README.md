@@ -122,3 +122,33 @@ Explore the other configurations available at `experiment_definitions/alfred/eva
 | valid_seen      |  4.23%      |  9.14%      | 1229          |
 | tests_unseen    |  0.49%      |  4.28%      | 1996          |
 | tests_seen      |  6.27%      | 10.44%      | 2043          |
+
+
+## Hardware 
+Trained and Tested on:
+- **GPU** - RTX A6000
+- **CPU** - Intel(R) Core(TM) i7-12700K CPU @ 3.60GHz
+- **RAM** - 64GB
+- **OS** - Ubuntu 20.04
+
+
+## Citation
+**ReALFRED**
+```
+@inproceedings{kim2024realfred,
+  author    = {Kim, Taewoong and Min, Cheolhong and Kim, Byeonghwi and Kim, Jinyeon and Jeung, Wonje and Choi, Jonghyun},
+  title     = {ReALFRED: Interactive Instruction Following Benchmark in Photo-Realistic Environment},
+  booktitle = {ECCV},
+  year      = {2024}
+  }
+```
+**HLSM**
+```
+@inproceedings{blukis2021persistent,
+  author    = {Blukis, Valts and Paxton, Chris and Fox, Dieter and Garg, Animesh and Artzi, Yoav},
+  title     = {A Persistent Spatial Semantic Representation for High-level Natural Language Instruction Execution},
+  booktitle = {CoRL},
+  year      = {2021}
+}
+
+```

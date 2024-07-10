@@ -77,6 +77,7 @@ unzip Pretrained_Models_realfred.zip
 
 ```
 mv mrcnn_objects_best.pt $LLMPLANNER
+mv mrcnn_receptacles_best.pt $FILM
 ```
 
 2. Depth prediction
@@ -139,4 +140,33 @@ Change directory to "results/analyze_recs/" and inside a python3 console,
 
 ```
 python val_sr.py
+```
+
+
+## Hardware 
+Trained and Tested on:
+- **GPU** - RTX A6000
+- **CPU** - Intel(R) Core(TM) i7-12700K CPU @ 3.60GHz
+- **RAM** - 64GB
+- **OS** - Ubuntu 20.04
+
+
+## Citation
+**ReALFRED**
+```
+@inproceedings{kim2024realfred,
+  author    = {Kim, Taewoong and Min, Cheolhong and Kim, Byeonghwi and Kim, Jinyeon and Jeung, Wonje and Choi, Jonghyun},
+  title     = {ReALFRED: Interactive Instruction Following Benchmark in Photo-Realistic Environment},
+  booktitle = {ECCV},
+  year      = {2024}
+  }
+```
+**LLM-Planner**
+```
+@inproceedings{song2023llmplanner,
+  author    = {Song, Chan Hee and Wu, Jiaman and Washington, Clayton and Sadler, Brian M. and Chao, Wei-Lun and Su, Yu},
+  title     = {LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models},
+  booktitle = {ICCV},
+  year      = {2023}
+}
 ```

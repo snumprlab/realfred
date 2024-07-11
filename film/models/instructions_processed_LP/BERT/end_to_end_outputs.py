@@ -18,7 +18,7 @@ import argparse
 import os
 parser = argparse.ArgumentParser()
 parser.add_argument('-sp','--split', type=str, choices=['valid_unseen', 'valid_seen', 'tests_seen', 'tests_unseen'], required=True)
-parser.add_argument('-m','--model_saved_folder_name', type=str, required=True, default='best_models')
+parser.add_argument('-m','--model_saved_folder_name', type=str, required=True)
 parser.add_argument('-o','--output_name', type=str, required=True)
 parser.add_argument('--no_appended', action='store_true')
 

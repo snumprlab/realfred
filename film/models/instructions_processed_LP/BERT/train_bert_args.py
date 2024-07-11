@@ -39,17 +39,7 @@ else:
     
 import pickle
 template_by_label = pickle.load(open('data/alfred_data/alfred_dicts/template_by_label.p', 'rb'))
-# train_set = pickle.load(open('data/alfred_data/train_text_with_ppdl_low_appended.p', 'rb'))
-# val_set_seen = pickle.load(open('data/alfred_data/val_seen_text_with_ppdl_low_appended.p', 'rb'))
-# val_set_unseen = pickle.load(open('data/alfred_data/val_unseen_text_with_ppdl_low_appended.p', 'rb'))
 
-# obj2idx = pickle.load(open('data/alfred_data/alfred_dicts/obj2idx.p', 'rb'))
-# recep2idx = pickle.load(open('data/alfred_data/alfred_dicts/recep2idx.p', 'rb'))
-# train_set = pickle.load(open('data/alfred_data/train_text_with_ppdl_low_appended_new_split.p', 'rb'))
-# val_set_seen = pickle.load(open('data/alfred_data/valid_seen_text_with_ppdl_low_appended_new_split.p', 'rb'))
-# val_set_unseen = pickle.load(open('data/alfred_data/valid_unseen_text_with_ppdl_low_appended_new_split.p', 'rb'))
-
-# 0514
 train_set = pickle.load(open('data/alfred_data/train_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
 val_set_seen = pickle.load(open('data/alfred_data/valid_seen_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
 val_set_unseen = pickle.load(open('data/alfred_data/valid_unseen_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))

@@ -189,7 +189,8 @@ python3 compare_BERT_pred_with_GT.py
 ```
 
 
-Download pretraind models (appended): 
+### Download pretraind models
+You can download pretrained models (appended).
 ```
 cd models/instructions_processed_LP/BERT
 git clone https://huggingface.co/SNUMPR/realfred_film_BERT_pretrained

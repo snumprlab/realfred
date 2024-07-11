@@ -16,7 +16,7 @@ $ cd $ALFRED_ROOT
 $ pip install --upgrade pip
 $ pip install -r requirements.txt
 ```
-You also need to install Pytorch depending on your system. e.g) PyTorch v1.8.1 + cuda 11.1 <br>
+You also need to install Pytorch depending on your system. e.g., PyTorch v1.8.1 + cuda 11.1 <br>
 Refer [here](https://pytorch.kr/get-started/previous-versions/)
 ```
 pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html

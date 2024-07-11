@@ -17,8 +17,8 @@ import glob
 import argparse
 import os
 parser = argparse.ArgumentParser()
-parser.add_argument('-sp','--split', type=str, choices=['val_unseen', 'val_seen', 'tests_seen', 'tests_unseen'], required=True)
-parser.add_argument('-m','--model_saved_folder_name', type=str, required=True)
+parser.add_argument('-sp','--split', type=str, choices=['valid_unseen', 'valid_seen', 'tests_seen', 'tests_unseen'], required=True)
+parser.add_argument('-m','--model_saved_folder_name', type=str, required=True, default='best_models')
 parser.add_argument('-o','--output_name', type=str, required=True)
 parser.add_argument('--no_appended', action='store_true')
 
@@ -51,17 +51,16 @@ def accurate_both(y_pred1, y_batch1, y_pred2, y_batch2):
 
 #Load data
 import pickle
-template_by_label = pickle.load(open('data/alfred_data/alfred_dicts/correct_template_by_label_ppdl.p', 'rb'))
-new_labels_dict = pickle.load(open('data/alfred_data/alfred_dicts/correct_labels_dict_ppdl.p', 'rb'))
-val_set_unseen = pickle.load(open('data/alfred_data/'+ args.split + '_text_with_ppdl_low_appended.p', 'rb'))
-# Compare with GT arguments
-desc2id = pickle.load(open('data/alfred_data/'+ args.split + '_task_desc_to_task_id.p', 'rb'))
+val_set_unseen = pickle.load(open('data/alfred_data/'+ args.split + '_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
+desc2id = pickle.load(open('data/alfred_data/'+ args.split + '_task_desc_to_task_id_oct24.p', 'rb'))
 
-obj2idx = pickle.load(open('data/alfred_data/alfred_dicts/obj2idx.p', 'rb'))
-recep2idx = pickle.load(open('data/alfred_data/alfred_dicts/recep2idx.p', 'rb'))
+# REALFRED new split
+obj2idx = pickle.load(open('data/alfred_data/alfred_dicts/obj2idx_new_split.p', 'rb'))
+recep2idx = pickle.load(open('data/alfred_data/alfred_dicts/recep2idx_new_split.p', 'rb'))
+
 toggle2idx = pickle.load(open('data/alfred_data/alfred_dicts/toggle2idx.p', 'rb'))
 
-idx2obj = {v:k for k, v in obj2idx.items()} #only glassbottle should remain
+idx2obj = {v:k for k, v in obj2idx.items()}
 idx2recep = {v:k for k, v in recep2idx.items()}
 idx2toggle = {v:k for k, v in toggle2idx.items()}
 
@@ -117,7 +116,7 @@ del outputs
 del base_model
 vs_idx2predicted_label = {i:y for i, y in enumerate(y_hat_list_vs)}
 
-#Now extract the arguments
+#Now extract the arguments 
 global c
 c = 0
 def get_prediction(classifier, N, input_ids, attention_mask):
@@ -130,38 +129,50 @@ def get_prediction(classifier, N, input_ids, attention_mask):
         attention_mask_batch = attention_mask[N*b:N*(b+1)].to(device)
         
         #outputs = base_model(input_ids_batch, attention_mask=attention_mask_batch, labels=labels_batch.view(1,-1))
+        # print('input_ids_batch: ', input_ids_batch.shape)
         outputs = classifier(input_ids_batch, attention_mask=attention_mask_batch)
         global c
         c += 1
-        print(c, torch.max(outputs.logits, 1).indices)
+        try:
+            print(c, torch.max(outputs.logits, 1).indices)
+        except:
+            print(outputs)
+            print(c)
+        # print(outputs.logits)
         predicted_templates = torch.max(outputs.logits, 1).indices
         del outputs
         y_hat_list += predicted_templates.cpu().numpy().tolist()
     return y_hat_list
 
 x_val_seen_p = [str(int(vs_idx2predicted_label[i])) + ' ' + x for i, x in enumerate(x_val_seen)]
+
 encoding_v_s = tokenizer(x_val_seen_p, return_tensors='pt', padding=True, truncation=True)
+print(encoding_v_s)
 input_ids_val_seen = encoding_v_s['input_ids'].to(device)
+print(input_ids_val_seen.shape)
 attention_mask_val_seen = encoding_v_s['attention_mask'].to(device) 
 
-parent_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(recep2idx)).to(device)     
-parent_target_classifier.load_state_dict(torch.load(os.path.join(save_folder_name, 'parent.pt')))    
-parent_outputs_hat = get_prediction(parent_target_classifier, 10, input_ids_val_seen, attention_mask_val_seen)
+parent_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(recep2idx)).to(device)   
+parent_target_classifier.load_state_dict(torch.load(os.path.join(save_folder_name, 'parent.pt')))
+parent_outputs_hat = get_prediction(parent_target_classifier, 9, input_ids_val_seen, attention_mask_val_seen)
 del parent_target_classifier
 c = 0
-object_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(obj2idx)).to(device)     
+
+object_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(obj2idx)).to(device)
 object_target_classifier.load_state_dict(torch.load(os.path.join(save_folder_name, 'object.pt')))
-object_outputs_hat = get_prediction(object_target_classifier, 10, input_ids_val_seen, attention_mask_val_seen)
+object_outputs_hat = get_prediction(object_target_classifier, 9, input_ids_val_seen, attention_mask_val_seen)
 del object_target_classifier
 c = 0
-sliced_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2).to(device)     
+
+sliced_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2).to(device)
 sliced_target_classifier.load_state_dict(torch.load(os.path.join(save_folder_name, 'sliced.pt')))
-sliced_outputs_hat = get_prediction(sliced_target_classifier, 10, input_ids_val_seen, attention_mask_val_seen)
+sliced_outputs_hat = get_prediction(sliced_target_classifier, 9, input_ids_val_seen, attention_mask_val_seen)
 del sliced_target_classifier
 c = 0
-mrecep_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(obj2idx)).to(device)     
+
+mrecep_target_classifier = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(obj2idx)).to(device)
 mrecep_target_classifier.load_state_dict(torch.load(os.path.join(save_folder_name, 'mrecep.pt')))
-mrecep_outputs_hat = get_prediction(mrecep_target_classifier, 10, input_ids_val_seen, attention_mask_val_seen)
+mrecep_outputs_hat = get_prediction(mrecep_target_classifier, 9, input_ids_val_seen, attention_mask_val_seen)
 del mrecep_target_classifier
 
 instructions= val_set_unseen['x_low']
@@ -171,8 +182,6 @@ instructions= val_set_unseen['x']
 instruction2_params_test_unseen = {}
 for i, instruction in enumerate(instructions):
     task_type = vs_idx2predicted_label[i]
-    
-        
     object_target = idx2obj[object_outputs_hat[i]]
     if parent_outputs_hat == None:
         parent_target = None
@@ -182,18 +191,19 @@ for i, instruction in enumerate(instructions):
         mrecep_target = None
     else:
         mrecep_target = idx2obj[mrecep_outputs_hat[i]]
-    
     sliced_target = sliced_outputs_hat[i]
     
     if task_type == 5:
         parent_target = None
-    if task_type !=1:
-        mrecep_target = None
+    # if task_type !=1:
+    #     mrecep_target = None
 
-    instruction2_params_test_unseen[instruction] = {'task_type': task_type, 'mrecep_target': mrecep_target,\
+    instruction2_params_test_unseen[instruction] = {'task_type': task_type, \
+                                                    'mrecep_target': mrecep_target,\
+                                                    'sliced': sliced_target,\
                                                       'object_target': object_target,\
-                                                      'parent_target': parent_target,\
-                                                  'sliced': sliced_target}
+                                                      'parent_target': parent_target}
+
 
 pickle.dump(instruction2_params_test_unseen, open("../" + args.output_name + ".p", "wb"))
 

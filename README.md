@@ -1,10 +1,10 @@
 # ReALFRED
 > [**ReALFRED: Interactive Instruction Following Benchmark in Photo-Realistic Environments**](https://twoongg.github.io/projects/realfred),            
 [Taewoong Kim*](https://twoongg.github.io), 
-[Cheolhong Min*](https://to-be-appear), 
-[Byeonghwi Kim](https://to-be-appear), 
-[Jinyeon kim](https://to-be-appear), 
-[Wonje Jeung](https://to-be-appear), 
+[Cheolhong Min*](https://mch0916.github.io/), 
+[Byeonghwi Kim](https://bhkim94.github.io/), 
+[Jinyeon kim](https://wild-reptile-5c4.notion.site/Jinyeon-Kim-s-Portfolio-page-ef855010f6c445488ad6969ed7cda11f?pvs=4), 
+[Wonje Jeung](https://cryinginitial.github.io/), 
 [Jonghyun Choi](https://ppolon.github.io)
 
 > **Abstract:** *Simulated virtual environments have been widely used to learn robotic agents that perform daily household tasks. These environments encourage research progress by far, but often provide limited object interactability, visual appearance different from real-world environments, or relatively smaller environment sizes. This prevents the learned models in the virtual scenes from being readily deployable. To bridge the gap between these learning environments and deploying (i.e., real) environments, we propose the ReALFRED benchmark that employs real-world scenes, objects, and room layouts to learn agents to complete household tasks by understanding free-form language instructions and interacting with objects in large, multi-room and 3D-captured scenes. Specifically, we extend the ALFRED benchmark with updates for larger environmental spaces with smaller visual domain gaps. With ReALFRED, we analyze previously crafted methods for the ALFRED benchmark and observe that they consistently yield lower performance in all metrics, encouraging the community to develop methods in more realistic environments. We will release the dataset and code for reproducibility.*

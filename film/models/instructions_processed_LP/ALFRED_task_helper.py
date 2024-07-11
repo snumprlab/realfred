@@ -23,44 +23,30 @@ def read_test_dict(test, appended, unseen):
     if test:
         if appended:
             if unseen:
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_tests_unseen_new_split_GT_aug28.p", "rb"))
+                return pickle.load(open("intruct2params/instruction2_params_tests_unseen_appended.p", "rb"))
             else:
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_tests_seen_new_split_GT_aug28.p", "rb"))
+                return pickle.load(open("intruct2params/instruction2_params_tests_seen_appended.p", "rb"))
         else:
-            if unseen:
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_test_unseen_916_noappended.p", "rb"))
-                
-                # REALFRED
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_test_unseen_noappended_new_split_bert_trained.p", "rb"))
+            assert()
+            # if unseen:
+            #     return pickle.load(open("models/instructions_processed_LP/instruction2_params_test_unseen_noappended.p", "rb"))
 
-            else:
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_test_seen_916_noappended.p", "rb"))
-                # REALFRED
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_test_seen_noappended_new_split_bert_trained.p", "rb"))
+            # else:
+            #     return pickle.load(open("models/instructions_processed_LP/instruction2_params_test_seen_noappended.p", "rb"))
                 
     else:
         if appended:
             if unseen:
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_val_unseen_appended.p", "rb"))
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_unseen_new_split_GT_aug28.p", "rb"))
-                
-                # tests_unseen
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_unseen_new_split_GT_aug28_t.p", "rb"))
+                return pickle.load(open("intruct2params/instruction2_params_valid_unseen_appended.p", "rb"))
             else:
-                # # return pickle.load(open("models/instructions_processed_LP/instruction2_params_val_seen_appended.p", "rb"))
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_seen_new_split_GT_aug28.p", "rb"))
-                
-                # tests_seen
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_seen_new_split_GT_aug28_t.p", "rb"))
+                return pickle.load(open("intruct2params/instruction2_params_valid_seen_appended.p", "rb"))
         else:
-            if unseen:
-                # REALFRED
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_val_unseen_916_noappended.p", "rb"))
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_unseen_noappended_new_split.p", "rb"))
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_unseen_new_split_GT_aug28_t.p", "rb"))
-            else:
-                # return pickle.load(open("models/instructions_processed_LP/instruction2_params_val_seen_916_noappended.p", "rb"))
-                return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_seen_new_split_GT_aug28_t.p", "rb"))
+            assert()
+            # if unseen:
+            #     return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_unseen_noappended.p", "rb"))
+            # else:
+
+            #     return pickle.load(open("models/instructions_processed_LP/instruction2_params_valid_seen_noappended.p", "rb"))
 
 def exist_or_no(string):
     if string == '' or string == False:
@@ -149,7 +135,7 @@ def get_list_of_highlevel_actions(traj_data, test=False, test_dict=None, args_no
     if test:
         r_idx = traj_data['ann']['repeat_idx']
         instruction = traj_data['turk_annotations']['anns'][r_idx]['task_desc']
-        # aug28
+
 
         #if appended:
         instruction = instruction.lower()

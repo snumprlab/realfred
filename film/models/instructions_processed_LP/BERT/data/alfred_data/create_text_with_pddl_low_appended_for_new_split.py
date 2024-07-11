@@ -5,7 +5,7 @@ import json
 import pickle
 import string
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_path', type=str, default="/media/user/data2/FILM/alfred_data_all/json_2.1.0", help="where to look for the generated data") # annotation path
+parser.add_argument('--data_path', type=str, default=os.environ['FILM']+"/alfred_data_all/json_2.1.0", help="where to look for the generated data") # annotation path
 parser.add_argument('--split', type=str, default="valid_unseen")
 # parser.add_argument('-o','--output_name', type=str)
 args = parser.parse_args()
@@ -14,11 +14,8 @@ split = args.split
 exclude = set(string.punctuation)
 result = dict()
 
-# Path of 'traj_data.json' files that were created when the trajectory was generated
-# traj_data_path = "/media/user/data/alfred_4.3.0/gen/dataset/Finished"
 
-
-traj_data_path = "/media/user/data2/FILM/alfred_data_all/Re_json_2.1.0"
+traj_data_path = os.environ['FILM']+"/alfred_data_all/Re_json_2.1.0"
 task_to_path = dict()
 desc_to_gt_params = dict()     # 'wash the brown vegetable and put it on the counter’: 
 JSON_FILENAME = "traj_data.json"
@@ -33,9 +30,6 @@ for dir_name, _, _ in os.walk(traj_data_path):
 
 task_types = {"pick_cool_then_place_in_recep": 0, "pick_and_place_with_movable_recep": 1, "pick_and_place_simple": 2, "pick_two_obj_and_place": 3, "pick_heat_then_place_in_recep": 4, "look_at_obj_in_light": 5, "pick_clean_then_place_in_recep": 6}
 
-# 'task_desc': task
-# {'wash the brown vegetable and put it on the counter’: 'trial_T20230514_192232_882070',
-# 'wash the brown vegetable and put it on the counter’: 'trial_T20230514_192232_882070', ...}
 x_task = dict()
 
 if args.split in ['tests_seen', 'tests_unseen']:
@@ -45,12 +39,8 @@ if args.split in ['train', 'valid_seen', 'valid_unseen']:
 
 n = 0
 d = 0
-# with open('../../../../../alfred_data_small/splits/REALFRED_splits.json', 'r') as f:
-# with open('alfred_data_small/splits/REALFRED_splits.json', 'r') as f:
-# with open('../../../../../alfred_data_small/splits/aug28.json', 'r') as f:
 
-# with open('../../../../../alfred_data_small/splits/oct24.json', 'r') as f:
-with open('/media/user/data2/FILM/alfred_data_small/splits/oct24.json', 'r') as f:
+with open(os.environ['FILM']+'/alfred_data_small/splits/oct24.json', 'r') as f:
     splits = json.load(f)
 tasks = list()
 for i in splits[split]:
@@ -63,12 +53,6 @@ for task in tasks:
     with open(os.path.join(traj_data_path,task,'pp','ann_0.json')) as f:
         ann_0 = json.load(f)
 
-    # anns = ann_0['turk_annotations']['anns']    # anns = [{"assignment_id", "high_descs", "task_desc"},{},{}]
-
-    ##### Without annotation #####
-    # anns = [ann_0['template']]
-
-    #0514
     anns = ann_0['turk_annotations']['anns']
 
     for j in anns:
@@ -86,12 +70,6 @@ for task in tasks:
 
         x_low = ''
 
-
-        ##### without template #####
-        # for k in j['high_descs']:
-
-        ##### Without annotation #####
-        # for k in j['high_descs'][:-1]:
         for k in j['high_descs']:
             if len(k)>0:
                 if k[-1] == '.':
@@ -139,9 +117,6 @@ for task in tasks:
         if args.split in ['train', 'valid_seen', 'valid_unseen']:
             # obj2idx_new_split, recep2idx_new_split
             import pickle
-            # obj2idx = pickle.load(open('alfred_dicts/obj2idx_new_split.p', 'rb'))
-            # recep2idx = pickle.load(open('alfred_dicts/recep2idx_new_split.p', 'rb'))
-            # toggle2idx = pickle.load(open('alfred_dicts/toggle2idx.p', 'rb'))
             obj2idx = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/obj2idx_new_split.p', 'rb'))
             recep2idx = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/recep2idx_new_split.p', 'rb'))
             toggle2idx = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/toggle2idx.p', 'rb'))
@@ -171,21 +146,6 @@ for task in tasks:
                 result['toggle_targets'].append(toggle2idx[None])
 
 
-# pickle.dump(result, open(args.output_name + ".p", "wb"))
-# pickle.dump(result, open(args.split + '_text_with_ppdl_low_appended_new_split_aug28_t.p', 'wb'))
-# pickle.dump(x_task, open(args.split + '_task_desc_to_task_id_aug28_t.p', 'wb'))
-# pickle.dump(desc_to_gt_params, open('../../../instruction2_params_' + args.split + '_new_split_GT_aug28_t.p', 'wb'))
-# print(f"num of annotations: {n}")
-# print(f"num of duplication: {d}")
-# print(f"num of not duplication: {n-d}")
-
-# 0514
-# pickle.dump(result, open(args.split + '_text_with_ppdl_low_appended_new_split_oct24.p', 'wb'))
-# pickle.dump(x_task, open(args.split + '_task_desc_to_task_id_oct24.p', 'wb'))
-# pickle.dump(desc_to_gt_params, open('../../../instruction2_params_' + args.split + '_new_split_GT_oct24.p', 'wb'))
 pickle.dump(result, open('models/instructions_processed_LP/BERT/data/alfred_data/'+args.split + '_text_with_ppdl_low_appended_new_split_oct24.p', 'wb'))
 pickle.dump(x_task, open('models/instructions_processed_LP/BERT/data/alfred_data/'+args.split + '_task_desc_to_task_id_oct24.p', 'wb'))
 pickle.dump(desc_to_gt_params, open('models/instructions_processed_LP/instruction2_params_' + args.split + '_new_split_GT_oct24.p', 'wb'))
-print(f"num of annotations: {n}")
-print(f"num of duplication: {d}")
-print(f"num of not duplication: {n-d}")

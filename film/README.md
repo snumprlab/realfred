@@ -178,12 +178,21 @@ $ python3 end_to_end_outputs.py -sp YOURSPLIT -m MODEL_SAVED_FOLDER_NAME -o OUTP
 ```
 (Again, use _--no_appended_ to use high level instructions only for training data.)
 
+After you get the output pickle files (e.g., `instruction2_params_tests_seen_appended_new_split_oct24.p`), put them in `instruc2params` folder.
+
+Then, edit `read_test_dict` in `models/instructions_processed_LP/ALFRED_task_helper.py` to use your files.
+
+You can check the accuracy of the argument prediction results of trained models.
+```
+cd ..
+python3 compare_BERT_pred_with_GT.py
+```
+
 
 Download pretraind models (appended): 
 ```
 cd models/instructions_processed_LP/BERT
 git clone https://huggingface.co/SNUMPR/realfred_film_BERT_pretrained
-mv realfred_film_BERT_pretrained best_models
 ```
 
 

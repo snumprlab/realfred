@@ -142,6 +142,49 @@ Change directory to "results/analyze_recs/" and inside a python3 console,
 python val_sr.py
 ```
 
+## Train BERT models
+
+Move to the following directory and clone data. Then, change the folder name as  `alfred_data`.
+```
+cd models/instructions_processed_LP/BERT/data
+git clone https://huggingface.co/SNUMPR/realfred_film_BERT_data
+mv realfred_film_BERT_data alfred_data
+```
+
+Change directory:
+
+```
+$ cd models/instructions_processed_LP/BERT 
+```
+
+To train BERT type classification ("_base.pt_"),
+
+```
+$ python3 train_bert_base.py -lr 1e-5
+```
+(Use _--no_appended_ to use high level instructions only for training data.)
+
+To train BERT argument classification, 
+
+```
+$ python3 train_bert_args.py --no_divided_label --task mrecep -lr 5e-5
+```
+(Use _--no_appended_ to use high level instructions only for training data.)
+Similarly, train models for _--task object, --task parent, --task toggle, --task sliced_.
+
+To generate the finial output for "agent/sem_exp_thor.py",
+```
+$ python3 end_to_end_outputs.py -sp YOURSPLIT -m MODEL_SAVED_FOLDER_NAME -o OUTPUT_PICKLE_NAME
+```
+(Again, use _--no_appended_ to use high level instructions only for training data.)
+
+
+Download pretraind models (appended): 
+```
+cd models/instructions_processed_LP/BERT
+git clone https://huggingface.co/SNUMPR/realfred_film_BERT_pretrained
+mv realfred_film_BERT_pretrained best_models
+```
 
 
 ## Hardware 

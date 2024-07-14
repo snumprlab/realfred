@@ -18,7 +18,11 @@ $ cd $ALFRED_ROOT
 $ pip install --upgrade pip
 $ pip install -r requirements.txt
 ```
-
+You also need to install Pytorch depending on your system. e.g) PyTorch v1.10.0 + cuda 11.1 <br>
+Refer [here](https://pytorch.kr/get-started/previous-versions/)
+```
+pip install torch==1.10.0+cu111 torchvision==0.11.0+cu111 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
+```
 
 ## Download
 Download the ResNet-18 features and annotation files from <a href="https://huggingface.co/datasets/SNUMPR/realfred_feat">the Hugging Face repo</a>.
@@ -79,7 +83,7 @@ MIT License
 ```
 @inproceedings{kim2024realfred,
   author    = {Kim, Taewoong and Min, Cheolhong and Kim, Byeonghwi and Kim, Jinyeon and Jeung, Wonje and Choi, Jonghyun},
-  title     = {ReALFRED: Interactive Instruction Following Benchmark in Photo-Realistic Environment},
+  title     = {ReALFRED: Embodied Instruction Following Benchmark in Photo-Realistic Environment},
   booktitle = {ECCV},
   year      = {2024}
   }

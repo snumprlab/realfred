@@ -18,6 +18,12 @@ $ cd $ALFRED_ROOT
 $ pip install --upgrade pip
 $ pip install -r requirements.txt
 ```
+You also need to install Pytorch depending on your system. e.g) PyTorch v1.10.0 + cuda 11.1 <br>
+Refer [here](https://pytorch.kr/get-started/previous-versions/)
+```
+pip install torch==1.10.0+cu111 torchvision==0.11.0+cu111 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
+```
+
 
 
 ## Download
@@ -68,10 +74,6 @@ Trained and Tested on:
 - **CPU** - Intel(R) Core(TM) i7-12700K CPU @ 3.60GHz
 - **RAM** - 64GB
 - **OS** - Ubuntu 20.04
-
-
-## License
-MIT License
 
 
 ## Citation

@@ -7,16 +7,17 @@ Created on Wed Jan 20 11:41:44 2021
 """
 
 #Train BERT on ALFRED data
-
+import tensorboard
+from tensorboardX import SummaryWriter
 import random
 import time
 import torch
 from torch import nn
 import os
-
+from tqdm import trange
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('-lr','--learning_rate', type=float, default='1e-05', help="learning rate")
+parser.add_argument('-lr','--learning_rate', type=float, help="learning rate")
 parser.add_argument('-model_type','--model_type', type=str, default='bert-base', help="one of roberta-large, roberta-base, bert-base, bert-large")
 parser.add_argument('-task_desc_only','--task_desc_only', action='store_true', help="one of roberta-large, roberta-base, bert-base, bert-large")
 parser.add_argument('--no_appended', action='store_true')
@@ -37,17 +38,11 @@ else:
     
 
 import pickle
-# directory = 'models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/'
+directory = 'data/alfred_data/'
 
-# train_set = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/train_text_with_ppdl_low_appended_GT_oct14_131.p', 'rb'))
-# val_set_seen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/valid_seen_text_with_ppdl_low_appended_GT_oct14_131.p', 'rb'))
-# val_set_unseen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/valid_unseen_text_with_ppdl_low_appended_GT_oct14_131.p', 'rb'))
-
-train_set = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/after_voting_instruction/train_text_with_ppdl_low_appended_GT_after_voting.p', 'rb'))
-val_set_seen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/after_voting_instruction/valid_seen_text_with_ppdl_low_appended_GT_after_voting.p', 'rb'))
-val_set_unseen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/after_voting_instruction/valid_unseen_text_with_ppdl_low_appended_GT_after_voting.p', 'rb'))
-
-
+train_set = pickle.load(open('data/alfred_data/train_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
+val_set_seen = pickle.load(open('data/alfred_data/valid_seen_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
+val_set_unseen = pickle.load(open('data/alfred_data/valid_unseen_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
 
 #Now process like huggingface
 if args.no_appended:
@@ -111,9 +106,9 @@ if args.no_appended:
     N=64
 save_folder_name = args.model_type + '_lr_' + str(args.learning_rate) +'/'
 if args.no_appended:
-    super_folder = 'saved_models_noappended_new_split/'
+    super_folder = 'saved_models_noappended_new_split_oct24/'
 else:
-    super_folder = 'saved_models_appended_new_split/'
+    super_folder = 'saved_models_appended_new_split_oct24/'
 if not os.path.exists(super_folder + save_folder_name):
     os.makedirs(super_folder + save_folder_name)
 
@@ -134,11 +129,13 @@ def accurate_total(y_pred, y_batch):
     return num_accurate
 
 start_train_time = time.time()
-for t in range(50):
+summary_writer = SummaryWriter(log_dir=super_folder + save_folder_name)
+train_iter = 0
+for t in trange(50):
     model.train()
     avg_training_loss = 0.0
     training_acc = 0.0
-    for b in range(int(input_ids.shape[0]/N)):
+    for b in trange(int(input_ids.shape[0]/N)):
         input_ids_batch = input_ids[N*b:N*(b+1)].to(device)
         labels_batch = labels[N*b:N*(b+1)].to(device)
         attention_mask_batch = attention_mask[N*b:N*(b+1)].to(device)
@@ -146,8 +143,13 @@ for t in range(50):
         #forward pass
         outputs = model(input_ids_batch, attention_mask=attention_mask_batch, labels=labels_batch.view(1,-1))
         loss = outputs.loss
+        summary_writer.add_scalar('train/loss', loss, train_iter)
+
+        
+        
         num_acc = accurate_total(y_pred=outputs.logits, y_batch=labels_batch.view(-1))
         loss.backward()
+        train_iter+=1
         optimizer.step()
         #
         avg_training_loss += loss

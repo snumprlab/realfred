@@ -16,7 +16,7 @@ $ cd $ALFRED_ROOT
 $ pip install --upgrade pip
 $ pip install -r requirements.txt
 ```
-You also need to install Pytorch depending on your system. e.g) PyTorch v1.8.1 + cuda 11.1 <br>
+You also need to install Pytorch depending on your system. e.g., PyTorch v1.8.1 + cuda 11.1 <br>
 Refer [here](https://pytorch.kr/get-started/previous-versions/)
 ```
 pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
@@ -142,6 +142,59 @@ Change directory to "results/analyze_recs/" and inside a python3 console,
 python val_sr.py
 ```
 
+## Train BERT models
+
+Move to the following directory and clone data. Then, change the folder name as  `alfred_data`.
+```
+cd models/instructions_processed_LP/BERT/data
+git clone https://huggingface.co/SNUMPR/realfred_film_BERT_data
+mv realfred_film_BERT_data alfred_data
+```
+
+Change directory:
+
+```
+$ cd models/instructions_processed_LP/BERT 
+```
+
+To train BERT type classification ("_base.pt_"),
+
+```
+$ python3 train_bert_base.py -lr 1e-5
+```
+(Use _--no_appended_ to use high level instructions only for training data.)
+
+To train BERT argument classification, 
+
+```
+$ python3 train_bert_args.py --no_divided_label --task mrecep -lr 5e-5
+```
+(Use _--no_appended_ to use high level instructions only for training data.)
+Similarly, train models for _--task object, --task parent, --task toggle, --task sliced_.
+
+To generate the finial output for "agent/sem_exp_thor.py",
+```
+$ python3 end_to_end_outputs.py -sp YOURSPLIT -m MODEL_SAVED_FOLDER_NAME -o OUTPUT_PICKLE_NAME
+```
+(Again, use _--no_appended_ to use high level instructions only for training data.)
+
+After you get the output pickle files (e.g., `instruction2_params_tests_seen_appended_new_split_oct24.p`), put them in `instruc2params` folder.
+
+Then, edit `read_test_dict` in `models/instructions_processed_LP/ALFRED_task_helper.py` to use your files.
+
+You can check the accuracy of the argument prediction results of trained models.
+```
+cd ..
+python3 compare_BERT_pred_with_GT.py
+```
+
+
+### Download pretraind models
+You can download pretrained models (appended).
+```
+cd models/instructions_processed_LP/BERT
+git clone https://huggingface.co/SNUMPR/realfred_film_BERT_pretrained
+```
 
 
 ## Hardware 

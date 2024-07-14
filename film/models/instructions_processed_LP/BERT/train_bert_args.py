@@ -5,7 +5,8 @@ Created on Wed Feb  3 21:49:31 2021
 
 @author: soyeonmin
 """
-
+from tensorboardX import SummaryWriter
+from tqdm import trange
 import random
 import time
 import torch
@@ -15,7 +16,7 @@ import glob
 from collections import OrderedDict
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('-lr','--learning_rate', type=float, default=1e-05, help="learning rate")
+parser.add_argument('-lr','--learning_rate', type=float, default=1e-5, help="learning rate")
 parser.add_argument('-s','--seed', type=int, default=0, help="seed")
 parser.add_argument('-l','--label', type=int, default=1, help="template")
 parser.add_argument('-d','--decay', type=float, default=0.5, help="template")
@@ -37,22 +38,15 @@ else:
     device = torch.device('cpu')
     
 import pickle
-template_by_label = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/template_by_label.p', 'rb'))
+template_by_label = pickle.load(open('data/alfred_data/alfred_dicts/template_by_label.p', 'rb'))
 
+train_set = pickle.load(open('data/alfred_data/train_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
+val_set_seen = pickle.load(open('data/alfred_data/valid_seen_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
+val_set_unseen = pickle.load(open('data/alfred_data/valid_unseen_text_with_ppdl_low_appended_new_split_oct24.p', 'rb'))
 
-# train_set = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/train_text_with_ppdl_low_appended_GT_oct14_131.p', 'rb'))
-# val_set_seen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/valid_seen_text_with_ppdl_low_appended_GT_oct14_131.p', 'rb'))
-# val_set_unseen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/befoere_voting_instruction/valid_unseen_text_with_ppdl_low_appended_GT_oct14_131.p', 'rb'))
-train_set = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/after_voting_instruction/train_text_with_ppdl_low_appended_GT_after_voting.p', 'rb'))
-val_set_seen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/after_voting_instruction/valid_seen_text_with_ppdl_low_appended_GT_after_voting.p', 'rb'))
-val_set_unseen = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/after_voting_instruction/valid_unseen_text_with_ppdl_low_appended_GT_after_voting.p', 'rb'))
-
-
-
-
-obj2idx = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/obj2idx_new_split.p', 'rb'))
-recep2idx = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/recep2idx_new_split.p', 'rb'))
-toggle2idx = pickle.load(open('models/instructions_processed_LP/BERT/data/alfred_data/alfred_dicts/toggle2idx.p', 'rb'))
+obj2idx = pickle.load(open('data/alfred_data/alfred_dicts/obj2idx_new_split.p', 'rb'))
+recep2idx = pickle.load(open('data/alfred_data/alfred_dicts/recep2idx_new_split.p', 'rb'))
+toggle2idx = pickle.load(open('data/alfred_data/alfred_dicts/toggle2idx.p', 'rb'))
 
 assert args.task in ['mrecep', 'object', 'parent', 'toggle', 'sliced']
 if args.task == 'mrecep':
@@ -182,27 +176,31 @@ def accurate_total(y_pred, y_batch):
 
 
 if args.no_appended:
-    super_folder = 'saved_models_noappended_new_split/'
+    super_folder = 'saved_models_noappended_new_split_oct24/'
 else:
-    super_folder = 'saved_models_new_split/'
+    super_folder = 'saved_models_appended_new_split_oct24/'
 
 if args.task == 'sliced':
     save_folder_name = args.task +'/' + args.model_type + '_lr_' + str(args.learning_rate) + 'seed_' + str(args.seed) + 'decay_' + str(args.decay) +'/'
 else:
-    save_folder_name = args.task + '/template_' + str(args.label) + '/' + args.model_type+ '_lr_' + str(args.learning_rate) + 'seed_' + str(args.seed) + 'decay_' + str(args.decay) +'/'
+    save_folder_name = args.task +  str(args.label) + '/' + args.model_type+ '_lr_' + str(args.learning_rate) + 'seed_' + str(args.seed) + 'decay_' + str(args.decay) +'/'
 if not os.path.exists(super_folder+'argument_models/' + save_folder_name):
     os.makedirs(super_folder+'argument_models/' + save_folder_name)
     
 accuracy_dictionary = {'training_loss': [], 'training':[], 'test':[]}
 start_train_time = time.time()
-for t in range(50):
+
+summary_writer = SummaryWriter(log_dir=super_folder+'argument_models/' + save_folder_name)
+train_iter = 0
+
+for t in trange(50):
     model.train()
     if t>0 and (t+1)%args.decay_term ==0:
         learning_rate *= args.decay
         optimizer = AdamW(model.parameters(), lr=learning_rate)
     avg_training_loss = 0.0
     training_acc = 0.0
-    for b in range(int(input_ids.shape[0]/N)):
+    for b in trange(int(input_ids.shape[0]/N)):
         input_ids_batch = input_ids[N*b:N*(b+1)].to(device)
         labels_batch = label_train[N*b:N*(b+1)].to(device)
         attention_mask_batch = attention_mask[N*b:N*(b+1)].to(device)
@@ -210,10 +208,14 @@ for t in range(50):
         #forward pass
         outputs = model(input_ids_batch, attention_mask=attention_mask_batch, labels=labels_batch.view(1,-1))
         loss = outputs.loss
+        summary_writer.add_scalar('train/loss', loss, train_iter)
+        
+        
         num_acc = accurate_total(y_pred=outputs.logits, y_batch=labels_batch.view(-1))
         #if t ==0:
         #    print("loss at step ", t, " : ", loss.item())
         loss.backward()
+        train_iter+=1
         optimizer.step()
         #
         avg_training_loss += loss
@@ -237,6 +239,12 @@ for t in range(50):
         accuracy_dictionary['training_loss'].append(loss.item())
         accuracy_dictionary['training'].append(training_acc/input_ids.shape[0])
         accuracy_dictionary['test'].append(val_seen_acc)
+        summary_writer.add_scalar('valid/accuracy', val_seen_acc, train_iter)
+        
+        print("Epoch " + str(t) + "\n")
+        print("training loss: " + str(accuracy_dictionary['training_loss'][t]))
+        print("training accuracy: " + str(accuracy_dictionary['training'][t]))
+        print("validation (seen) accuracy: " + str(accuracy_dictionary['test'][t]))
     
 #Get the highest accuracy and delete the rest 
 highest_test = np.argwhere(accuracy_dictionary['test'] == np.amax(accuracy_dictionary['test']))
@@ -256,16 +264,24 @@ if os.path.isfile(file_path):
 #Save training/ test accuracy dictionary in a txt file
 f = open(super_folder+ 'argument_models/' + save_folder_name +  "training_log.txt", "w")
 for t in range(100):
+
     if t >= len(accuracy_dictionary['training_loss']):
         break
     if t == best_t:
         f.write("===========================================\n")
+        # print("===========================================\n")
     f.write("Epoch " + str(t) + "\n")
     f.write("training loss: " + str(accuracy_dictionary['training_loss'][t]) + "\n")
     f.write("training accuracy: " + str(accuracy_dictionary['training'][t]) + "\n")
     f.write("validation (seen) accuracy: " + str(accuracy_dictionary['test'][t]) + "\n")
+    
+    # print("Epoch " + str(t) + "\n")
+    # print("training loss: " + str(accuracy_dictionary['training_loss'][t]) + "\n")
+    # print("training accuracy: " + str(accuracy_dictionary['training'][t]) + "\n")
+    # print("validation (seen) accuracy: " + str(accuracy_dictionary['test'][t]) + "\n")
     if t == best_t:
         f.write("===========================================\n")
+        # print("===========================================\n")
 f.close()
 
 

@@ -135,7 +135,7 @@ def get_list_of_highlevel_actions(traj_data, test=False, test_dict=None, args_no
     if test:
         r_idx = traj_data['ann']['repeat_idx']
         instruction = traj_data['turk_annotations']['anns'][r_idx]['task_desc']
-        # oct14_131_debug
+
 
         #if appended:
         instruction = instruction.lower()

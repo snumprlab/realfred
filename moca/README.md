@@ -83,7 +83,7 @@ MIT License
 ```
 @inproceedings{kim2024realfred,
   author    = {Kim, Taewoong and Min, Cheolhong and Kim, Byeonghwi and Kim, Jinyeon and Jeung, Wonje and Choi, Jonghyun},
-  title     = {ReALFRED: Embodied Instruction Following Benchmark in Photo-Realistic Environment},
+  title     = {ReALFRED: An Embodied Instruction Following Benchmark in Photo-Realistic Environment},
   booktitle = {ECCV},
   year      = {2024}
   }

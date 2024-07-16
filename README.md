@@ -1,5 +1,5 @@
 # ReALFRED
-> [**ReALFRED: Interactive Instruction Following Benchmark in Photo-Realistic Environments**](https://twoongg.github.io/projects/realfred),            
+> [**ReALFRED: An Embodied Instruction Following Benchmark in Photo-Realistic Environments**](https://twoongg.github.io/projects/realfred),            
 [Taewoong Kim*](https://twoongg.github.io), 
 [Cheolhong Min*](https://mch0916.github.io/), 
 [Byeonghwi Kim](https://bhkim94.github.io/), 

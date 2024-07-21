@@ -51,12 +51,12 @@ $ export ALFRED_ROOT=$(pwd)/alfred
 * Now run
 ```
 $ cd $ALFRED_ROOT
-$ python models/train/train_seq2seq.py --data $(FILM)/alfred_data_small/Re_json_2.1.0 --model seq2seq_im_mask --dout exp/model:{model},name:pm_and_subgoals_01 --splits $(FILM)/alfred_data_small/splits/oct24.json --gpu --batch 8 --pm_aux_loss_wt 0.1 --subgoal_aux_loss_wt 0.1 --preprocess
+$ python models/train/train_seq2seq.py --data $FILM/alfred_data_small/Re_json_2.1.0 --model seq2seq_im_mask --dout exp/model:{model},name:pm_and_subgoals_01 --splits $FILM/alfred_data_small/splits/oct24.json --gpu --batch 8 --pm_aux_loss_wt 0.1 --subgoal_aux_loss_wt 0.1 --preprocess
 ```
 
-The will take 5~15 minutes. You will see this:
+The will take 2~5 minutes. You will see this:
 
-<img width="578" alt="스크린샷 2021-04-27 오후 5 51 07" src="https://user-images.githubusercontent.com/77866067/116317384-437fc980-a781-11eb-8c01-f6cdee98f824.png">
+<img width="578" alt="oct24" src="preprocess_oct24.png">
 
 Once the bars for preprocessing are all filled, the code will break with an error message. (You can ignore and proceed). 
 

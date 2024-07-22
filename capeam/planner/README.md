@@ -2,7 +2,7 @@
 This README provides step-by-step instructions for training the meta planner and both the sub-policy planners as part of our implementation in [ReALFRED](https://github.com/snumprlab/realfred).
 
 ## Preprocess
-### If you followed instruction provided [here](htttps;?/)
+Generate symbolic link.
 ```
 ln -s  $CAPEAM/alfred_data_all/Re_json_2.1.0 data/Re_json_2.1.0
 ln -s  $CAPEAM/alfred_data_all/splits data/splits
@@ -72,3 +72,10 @@ Replace `/path/to/meta/weight` and `/path/to/subpolicy/weights` with the actual 
 ## Results
 
 The output from the inference process (i.e., the generated plans) will be saved automatically in the `results/` directory. You can use them by editting `read_test_dict` in `$CAPEAM/models/instructions_processed_LP/ALFRED_task_helper.py` to use your files.
+
+## Hardware 
+Trained and Tested on:
+- **GPU** - RTX A6000
+- **CPU** - Intel(R) Core(TM) i7-12700K CPU @ 3.60GHz
+- **RAM** - 64GB
+- **OS** - Ubuntu 20.04

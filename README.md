@@ -11,7 +11,7 @@
 
 ## Installation
 
-Download builds.zip [here](https://drive.google.com/file/d/1ZAr-boREIUxqJoYefz4Lwxl_kPjzRtLf/view?usp=sharing).
+Download `builds.zip` [here](https://drive.google.com/file/d/1ZAr-boREIUxqJoYefz4Lwxl_kPjzRtLf/view?usp=sharing).
 
 ```
 $ unzip builds.zip
@@ -45,8 +45,17 @@ git clone https://huggingface.co/datasets/SNUMPR/realfred_feat data
 ```
 
 
-## Baseline code and paper
-- Coming soon
+## Baseline code
+This repository provides code for several baseline models implemented in the ReALFRED benchmark, including:
+- [**Seq2Seq**](/seq2seq)
+- [**MOCA**](/moca)
+- [**ABP**](/abp)
+- [**HLSM**](/hlsm)
+- [**FILM**](/film)
+- [**LLM-Planner**](/llmplanner)
+- [**CAPEAM**](/capeam)
+
+Please refer to each `README.md` for detailed instructions to reproduce results in the paper.
 
 ## Hardware 
 Tested on:

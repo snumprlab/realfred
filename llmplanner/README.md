@@ -1,4 +1,7 @@
 # ReALFRED - LLM-Planner
+This is the code repository of the paper [LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models](https://arxiv.org/abs/2212.04088) for reproduction in [ReALFRED](https://github.com/snumprlab/realfred). \
+Our code is largely built upon the codebase from [FILM](https://github.com/OSU-NLP-Group/LLM-Planner).
+
 ## Environment
 ### Clone repository
 ```
@@ -56,7 +59,7 @@ $ python models/train/train_seq2seq.py --data $(LLMPLANNER)/alfred_data_small/Re
 
 The will take 5~15 minutes. You will see this:
 
-<img width="578" alt="스크린샷 2021-04-27 오후 5 51 07" src="https://user-images.githubusercontent.com/77866067/116317384-437fc980-a781-11eb-8c01-f6cdee98f824.png">
+<img width="578" alt="oct24" src="media/preprocess_oct24.png">
 
 Once the bars for preprocessing are all filled, the code will break with an error message. (You can ignore and proceed). 
 
@@ -94,7 +97,7 @@ mv best_model_multi.pt $LLMPLANNER/models/semantic_policy/best_model_multi.pt
 
 ## Run LLM-Planner on Valid/ Tests Sets
 
-**Caveat**: Multiprocessing (using --num_processes > 1) will make the construction of semantic mapping slower. We recommend that you use "--num_processes 4" (or a number around 2) and just run several jobs. (E.g. one job with episodes from 0 to 200, another job with episodes from 200 to 400, etc)
+**Caveat**: Multiprocessing (using --num_processes > 1) will make the construction of semantic mapping slower. We recommend that you use "--num_processes 1" (or a number around 2) and just run several jobs. (E.g. one job with episodes from 0 to 200, another job with episodes from 200 to 400, etc)
 
 e.g., Run following command to evaluate LLM-Planner.
 ```
@@ -134,7 +137,7 @@ bash eval_total_tests.sh
 ## Evaluate results
 The output of your runs are saved in the pickles of "results/analyze_recs/".
 For example, you may see results like the following in your "results/analyze_recs/".
-![스크린샷 2022-02-13 오후 3 27 38](https://user-images.githubusercontent.com/77866067/153773547-86239f10-0255-4789-a4ca-4028b7f2f182.png)
+<img width="1791" alt="pickles" src="media/pickles.png">
 
 Change directory to "results/analyze_recs/" and inside a python3 console,
 

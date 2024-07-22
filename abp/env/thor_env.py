@@ -267,11 +267,6 @@ class ThorEnv(Controller):
         new_action = copy.deepcopy(action)
         new_action['moveMagnitude'] = constants.AGENT_STEP_SIZE / smoothing_factor
 
-        #new_action['renderImage'] = render_settings['renderImage']
-        #new_action['renderClassImage'] = render_settings['renderClassImage']
-        #new_action['renderObjectImage'] = render_settings['renderObjectImage']
-        #new_action['renderDepthImage'] = render_settings['renderDepthImage']
-
         events = []
         for xx in range(smoothing_factor - 1):
             event = super().step(new_action)
@@ -312,12 +307,6 @@ class ThorEnv(Controller):
                     },
                     'horizon': horizon,
                     'standing': True,
-                    #'tempRenderChange': True,
-                    #'renderNormalsImage': False,
-                    #'renderImage': render_settings['renderImage'],
-                    #'renderClassImage': render_settings['renderClassImage'],
-                    #'renderObjectImage': render_settings['renderObjectImage'],
-                    #'renderDepthImage': render_settings['renderDepthImage'],
                 }
                 event = super().step(teleport_action)
             else:
@@ -363,12 +352,6 @@ class ThorEnv(Controller):
                     },
                     'horizon': np.round(start_horizon * (1 - xx) + end_horizon * xx, 3),
                     'standing': True,
-                    #'tempRenderChange': True,
-                    #'renderNormalsImage': False,
-                    #'renderImage': render_settings['renderImage'],
-                    #'renderClassImage': render_settings['renderClassImage'],
-                    #'renderObjectImage': render_settings['renderObjectImage'],
-                    #'renderDepthImage': render_settings['renderDepthImage'],
                 }
                 event = super().step(teleport_action)
             else:
@@ -411,12 +394,6 @@ class ThorEnv(Controller):
             },
             'horizon': np.round(end_horizon, 3),
             'standing': True,
-            #'tempRenderChange': True,
-            #'renderNormalsImage': False,
-            #'renderImage': render_settings['renderImage'],
-            #'renderClassImage': render_settings['renderClassImage'],
-            #'renderObjectImage': render_settings['renderObjectImage'],
-            #'renderDepthImage': render_settings['renderDepthImage'],
         }
         event = super().step(teleport_action)
         return event
@@ -444,12 +421,6 @@ class ThorEnv(Controller):
             },
             'horizon': horizon,
             'standing': True,
-            #'tempRenderChange': True,
-            #'renderNormalsImage': False,
-            #'renderImage': render_settings['renderImage'],
-            #'renderClassImage': render_settings['renderClassImage'],
-            #'renderObjectImage': render_settings['renderObjectImage'],
-            #'renderDepthImage': render_settings['renderDepthImage'],
         }
         event = super().step(teleport_action)
         return event

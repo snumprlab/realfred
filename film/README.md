@@ -1,4 +1,7 @@
 # ReALFRED - FILM
+This is the code repository of the paper [FILM: Following Instructions in Language with Modular Methods](https://arxiv.org/abs/2110.07342) for reproduction in [ReALFRED](https://github.com/snumprlab/realfred). \
+Our code is largely built upon the codebase from [FILM](https://github.com/soyeonm/FILM).
+
 ## Environment
 ### Clone repository
 ```
@@ -32,7 +35,7 @@ python -m pip install detectron2 -f \
 Please make sure that ai2thor's version is 4.3.0.
 1. Download the annotation files from <a href="https://huggingface.co/datasets/SNUMPR/realfred_json">the Hugging Face repo</a>.
 ```
-git clone https://huggingface.co/datasets/SNUMPR/realfred_json alfred_data_small
+git clone https://huggingface.co/datasets/SNUMPR/realfred_json alfred_data_all
 ```
 
 
@@ -51,19 +54,19 @@ $ export ALFRED_ROOT=$(pwd)/alfred
 * Now run
 ```
 $ cd $ALFRED_ROOT
-$ python models/train/train_seq2seq.py --data $FILM/alfred_data_small/Re_json_2.1.0 --model seq2seq_im_mask --dout exp/model:{model},name:pm_and_subgoals_01 --splits $FILM/alfred_data_small/splits/oct24.json --gpu --batch 8 --pm_aux_loss_wt 0.1 --subgoal_aux_loss_wt 0.1 --preprocess
+$ python models/train/train_seq2seq.py --data $FILM/alfred_data_all/Re_json_2.1.0 --model seq2seq_im_mask --dout exp/model:{model},name:pm_and_subgoals_01 --splits $FILM/alfred_data_all/splits/oct24.json --gpu --batch 8 --pm_aux_loss_wt 0.1 --subgoal_aux_loss_wt 0.1 --preprocess
 ```
 
 The will take 2~5 minutes. You will see this:
 
-<img width="578" alt="oct24" src="preprocess_oct24.png">
+<img width="578" alt="oct24" src="media/preprocess_oct24.png">
 
 Once the bars for preprocessing are all filled, the code will break with an error message. (You can ignore and proceed). 
 
 * Now run,
 ```
 $ cd $FILM
-$ mkdir alfred_data_all
+$ mkdir alfred_data_small
 $ ln -s alfred_data_small $FILM/alfred_data_all
 ```
 
@@ -94,7 +97,7 @@ mv best_model_multi.pt $FILM/models/semantic_policy/best_model_multi.pt
 
 ## Run FILM on Valid/ Tests Sets
 
-**Caveat**: Multiprocessing (using --num_processes > 1) will make the construction of semantic mapping slower. We recommend that you use "--num_processes 4" (or a number around 2) and just run several jobs. (E.g. one job with episodes from 0 to 200, another job with episodes from 200 to 400, etc)
+**Caveat**: Multiprocessing (using --num_processes > 1) will make the construction of semantic mapping slower. We recommend that you use "--num_processes 1" (or a number around 2) and just run several jobs. (E.g. one job with episodes from 0 to 200, another job with episodes from 200 to 400, etc)
 
 e.g., Run following command to evaluate FILM.
 ```
@@ -134,7 +137,7 @@ bash eval_total_tests.sh
 ## Evaluate results
 The output of your runs are saved in the pickles of "results/analyze_recs/".
 For example, you may see results like the following in your "results/analyze_recs/".
-![스크린샷 2022-02-13 오후 3 27 38](https://user-images.githubusercontent.com/77866067/153773547-86239f10-0255-4789-a4ca-4028b7f2f182.png)
+<img width="1647" alt="pickles" src="media/pickles.png">
 
 Change directory to "results/analyze_recs/" and inside a python3 console,
 

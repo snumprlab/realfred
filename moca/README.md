@@ -1,4 +1,6 @@
 # ReALFRED - MOCA
+This is the code repository of the paper [Factorizing Perception and Policy for Interactive Instruction Following](https://arxiv.org/abs/2012.03208) for reproduction in [ReALFRED](https://github.com/snumprlab/realfred). \
+Our code is largely built upon the codebase from [MOCA](https://github.com/gistvision/moca).
 
 
 ## Environment

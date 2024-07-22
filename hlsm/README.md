@@ -1,5 +1,6 @@
 # ReALFRED - HLSM
 This is the code repository of the paper [A Persistent Spatial Semantic Representation for High-level Natural Language Instruction Execution](https://arxiv.org/abs/2107.05612) for reproduction in [ReALFRED](https://github.com/snumprlab/realfred).
+Our code is largely built upon the codebase from [HLSM](https://github.com/valtsblukis/hlsm).
 
 ## Setup
 

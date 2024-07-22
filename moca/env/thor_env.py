@@ -32,9 +32,6 @@ class ThorEnv(Controller):
                  build_path=constants.BUILD_PATH):
                  
         self.local_executable_path = build_path
-        #self.start(x_display=x_display,
-        #           player_screen_height=player_screen_height,
-        #           player_screen_width=player_screen_width)
         self.task = None
 
         # internal states
@@ -45,14 +42,6 @@ class ThorEnv(Controller):
         # intemediate states for CoolObject Subgoal
         self.cooled_reward = False
         self.reopen_reward = False
-
-
-        # super().__init__(quality=quality)
-        # self.local_executable_path = build_path
-        # self.start(x_display=x_display,
-        #            player_screen_height=player_screen_height,
-        #            player_screen_width=player_screen_width)
-        # self.task = None
 
 
 
@@ -139,14 +128,8 @@ class ThorEnv(Controller):
             makeAgentsVisible=False,
         ))
         if len(object_toggles) > 0:
-            #super().step((dict(action='SetObjectToggles', objectToggles=object_toggles)))
-            # super().step((dict(action='SetObjectStates',
-            #                    StateChange="CanBeToggled",
-            #                    forceAction=False)))
             super().step(dict(action='SetObjectStates',
                             SetObjectStates={"objectType": "Microwave", "stateChange": "toggleable", 'isToggled': False}))
-            # super().step(dict(action='SetObjectStates',
-            #                  SetObjectStates={"objectType": "FloorLamp", "stateChange": "toggleable", 'isToggled': False}))
             pass
 
         if dirty_and_empty:
@@ -291,11 +274,6 @@ class ThorEnv(Controller):
         new_action = copy.deepcopy(action)
         new_action['moveMagnitude'] = constants.AGENT_STEP_SIZE / smoothing_factor
 
-        #new_action['renderImage'] = render_settings['renderImage']
-        #new_action['renderClassImage'] = render_settings['renderClassImage']
-        #new_action['renderObjectImage'] = render_settings['renderObjectImage']
-        #new_action['renderDepthImage'] = render_settings['renderDepthImage']
-
         events = []
         for xx in range(smoothing_factor - 1):
             event = super().step(new_action)
@@ -336,12 +314,6 @@ class ThorEnv(Controller):
                     },
                     'horizon': horizon,
                     'standing': True,
-                    #'tempRenderChange': True,
-                    #'renderNormalsImage': False,
-                    #'renderImage': render_settings['renderImage'],
-                    #'renderClassImage': render_settings['renderClassImage'],
-                    #'renderObjectImage': render_settings['renderObjectImage'],
-                    #'renderDepthImage': render_settings['renderDepthImage'],
                 }
                 event = super().step(teleport_action)
             else:
@@ -387,12 +359,6 @@ class ThorEnv(Controller):
                     },
                     'horizon': np.round(start_horizon * (1 - xx) + end_horizon * xx, 3),
                     'standing': True,
-                    #'tempRenderChange': True,
-                    #'renderNormalsImage': False,
-                    #'renderImage': render_settings['renderImage'],
-                    #'renderClassImage': render_settings['renderClassImage'],
-                    #'renderObjectImage': render_settings['renderObjectImage'],
-                    #'renderDepthImage': render_settings['renderDepthImage'],
                 }
                 event = super().step(teleport_action)
             else:
@@ -435,12 +401,6 @@ class ThorEnv(Controller):
             },
             'horizon': np.round(end_horizon, 3),
             'standing': True,
-            #'tempRenderChange': True,
-            #'renderNormalsImage': False,
-            #'renderImage': render_settings['renderImage'],
-            #'renderClassImage': render_settings['renderClassImage'],
-            #'renderObjectImage': render_settings['renderObjectImage'],
-            #'renderDepthImage': render_settings['renderDepthImage'],
         }
         event = super().step(teleport_action)
         return event
@@ -468,12 +428,6 @@ class ThorEnv(Controller):
             },
             'horizon': horizon,
             'standing': True,
-            #'tempRenderChange': True,
-            #'renderNormalsImage': False,
-            #'renderImage': render_settings['renderImage'],
-            #'renderClassImage': render_settings['renderClassImage'],
-            #'renderObjectImage': render_settings['renderObjectImage'],
-            #'renderDepthImage': render_settings['renderDepthImage'],
         }
         event = super().step(teleport_action)
         return event
@@ -518,8 +472,6 @@ class ThorEnv(Controller):
         elif "PutObject" in action:
             inventory_object_id = self.last_event.metadata['inventoryObjects'][0]['objectId']
             action = dict(action="PutObject",
-                          #objectId=inventory_object_id,
-                          #receptacleObjectId=object_id,
                           forceAction=True,
                           placeStationary=True,
                           objectId=object_id)

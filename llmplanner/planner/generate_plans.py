@@ -6,6 +6,7 @@ import copy
 from tqdm import tqdm
 import time
 from collections import defaultdict
+from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
 random.seed(2)    
 openai.api_key = YOUR_OPENAI_KEY
@@ -22,9 +23,8 @@ def load_task_json(task):
         data = json.load(f)
         
     return data
-sps = ['tests_unseen', 'tests_seen', 'valid_unseen', 'valid_seen']
 
-for sp in sps:
+def main(sp, destination ='all_examples'):
     cnt = 0
     retrived = json.load(open(f'all_examples/ReALFRED-{sp}_retrieved_keys.json'))
     few_examples = json.load(open('all_examples/all_examples.json'))
@@ -41,11 +41,10 @@ for sp in sps:
         task_id = task['task']
         instruction = data['turk_annotations']['anns'][r_idx]['task_desc']
         
-        
-        ## This is to ensure unique task keys
+
         for desc in data['turk_annotations']['anns'][r_idx]['high_descs']:
             instruction+= desc
-        ####
+
         goal = ''
         for i in range(len(data['ann']['goal'])-1):
             goal += data['ann']['goal'][i].strip() + ' '
@@ -110,7 +109,7 @@ for sp in sps:
             
             result[instruction]['triplet'].append(response.choices[0]['text'])
             
-            with open(f'planner_results/all_examples/turbo-bias-{sp}_result.json', 'w') as f:
+            with open(f'planner_results/{destination}/turbo-bias-{sp}_result.json', 'w') as f:
                 json.dump(result, f, indent= 4)
             
                 
@@ -120,3 +119,14 @@ for sp in sps:
             failed.append(instruction)
             with open(f'{sp}failed.json', 'w') as f:
                 json.dump(failed, f, indent= 4)
+
+if __name__ == "__main__":
+    # parser
+    parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+
+    # settings
+    parser.add_argument('--dn', help='desination', default='all_examples', type=str)
+    args = parser.parse_args()
+
+    for split in ['tests_seen', 'tests_unseen', 'valid_seen', 'valid_unseen']:
+        main(split, args.dn)

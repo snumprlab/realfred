@@ -1,0 +1,21 @@
+{
+  "@include": [
+    "alfred/env",
+    "alfred/eval/hlsm_full/eval_hlsm_full_base"
+  ],
+  "Setup": {
+    "env_setup": {
+      "data_splits": [
+        "valid_seen"
+      ]
+    },
+    "agent_setup": {
+    	"subgoal_model_file": "alfred_hlsm_subgoal_model_e4.pytorch",
+    	"depth_model_file": "hlsm_depth_model_e2.pytorch",
+    	"seg_model_file": "hlsm_segmentation_model_e2.pytorch",
+    	"navigation_model_file": "hlsm_gofor_navigation_model_e3.pytorch"
+    	},
+    "experiment_name": "eval_hlsm_valid_seen"
+  }
+}
+

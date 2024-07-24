@@ -1,0 +1,1 @@
+python main_hierarchical.py --metaWeight /path/to/meta/weight --subWeight /path/to/subpolicy/weighta

@@ -53,12 +53,12 @@ class Dataset_MetaController:
         feat = collections.defaultdict(list)
 
         def _get_param(root, idx):
-            traj_path = os.path.join(root.replace('data', 'data_outside'), 'pp', 'ann_%d.json'%idx)
+            traj_path = os.path.join(root, 'pp', 'ann_%d.json'%idx)
             traj_data = json.load(open(traj_path, 'r'))
             return traj_data['pddl_params']
 
         def _find_slice_recep(root, idx):
-            traj_path = os.path.join(root.replace('data', 'data_outside'), 'pp', 'ann_%d.json'%idx)
+            traj_path = os.path.join(root, 'pp', 'ann_%d.json'%idx)
             traj_data = json.load(open(traj_path, 'r'))
             slice_idx = [i for i, a in enumerate(traj_data['plan']['high_pddl']) if a['discrete_action']['action'] == 'SliceObject'][0]
             objectId = traj_data['plan']['high_pddl'][slice_idx]['planner_action']['objectId']

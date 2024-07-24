@@ -1,4 +1,7 @@
 # ReALFRED-Seq2Seq
+This is the code repository of the paper [ALFRED: A Benchmark for Interpreting Grounded Instructions for Everyday Tasks](https://arxiv.org/pdf/1912.01734) for reproduction in [ReALFRED](https://github.com/snumprlab/realfred). \
+Our code is largely built upon the codebase from [ALFRED](https://github.com/askforalfred/alfred).
+
 
 ## Environment
 ### Clone repository

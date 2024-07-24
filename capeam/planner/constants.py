@@ -85,11 +85,6 @@ data_dict = OrderedDict()  # dictionary for storing trajectory data to be dumped
 # Unity Hyperparameters
 
 BUILD_PATH = None
-# BUILD_PATH = os.environ['ALFRED_ROOT']+'/builds/thor-Linux64-local/thor-Linux64-local'
-# BUILD_PATH = '/home/user/twoong_laboratory/0504/ai2thor/unity/builds/thor-Linux64-local/thor-Linux64-local'
-
-# BUILD_PATH = '/media/user/Data/0504/builds/thor-Linux64-local/thor-Linux64-local'
-# BUILD_PATH='/media/user/data/Final/unity/builds/thor-Linux64-local/thor-Linux64-local'
 X_DISPLAY = '1'
 
 AGENT_STEP_SIZE = 0.25
